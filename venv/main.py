@@ -1,23 +1,10 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import pandas_datareader as web
-import datetime as dt
+import yfinance as yf
+AAPL_stock = yf.Ticker('AAPL').history(period='3mo',interval='1d')
+print(AAPL_stock)
 
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, LSTM
+import seaborn as sns
+sns.lineplot(data=AAPL_stock, x='Date', y="Close")
 
-# Load Data
-company = 'FB'
-
-start = dt.datetime(2012,1,1)
-end = dt.datetime(2020,1,1)
-
-data = web.DataReader(company, 'yahoo', start, end)
-
-# Prepare Data
-scaler = MinMaxScaler(feature_range=(0,1))
-scaled_data = scaler.fit_transform(data['Close'].values.reshape(-1,1))
-
-prediction_days = 60
+import matplotlib.ticker as ticker
+ax = sns.lineplot(data=AAPL_stock, x='Date', y="Close")
+ax.xaxis.set_major_locator(ticker.MultipleLocator(25))
