@@ -1,27 +1,23 @@
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import (
-     FigureCanvasTkAgg)
-import tkinter as tk
-import numpy as np
- 
-# Initialize Tkinter and Matplotlib Figure
-root = tk.Tk()
-fig, ax = plt.subplots()
- 
-# Tkinter Application
-frame = tk.Frame(root)
-label = tk.Label(text = "Matplotlib + Tkinter!")
-label.config(font=("Courier", 32))
-label.pack()
-frame.pack()
- 
-# Create Canvas
-canvas = FigureCanvasTkAgg(fig, master=root)  
-canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
- 
-# Plot data on Matplotlib Figure
-t = np.arange(0, 2*np.pi, .01)
-ax.plot(t, np.sin(t))
-canvas.draw()
- 
-root.mainloop()
+import pandas as pd
+import yfinance as yf
+from datetime import date, timedelta
+from matplotlib import pyplot as plt
+
+stock = input("View which stock?: ") 
+print("this one? " + stock)
+
+Start = date.today() - timedelta(365)
+Start.strftime('%Y-%m-%d')
+
+End = date.today() + timedelta(2)
+End.strftime('%Y-%m-%d')
+
+def closing_price(ticker):
+    Asset = pd.DataFrame(yf.download(ticker, start=Start,
+      end=End)['Adj Close'])     
+    return Asset
+
+stockInfo = closing_price(stock)
+plt.plot(stockInfo)
+plt.title(stock)
+plt.show()
